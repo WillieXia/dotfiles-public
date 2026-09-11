@@ -36,6 +36,33 @@ config.audible_bell = "Disabled"
 config.default_cursor_style = "BlinkingBar"
 config.check_for_updates = false
 
+-- Mouse --------------------------------------------------------------------
+-- In the alternate screen, WezTerm's default is to translate each wheel notch
+-- into `alternate_buffer_wheel_scroll_speed` arrow presses (hence the "scroll
+-- wheel is sending arrow keys" toast) — in Claude Code those land in the input
+-- box as history navigation instead of scrolling the transcript. Send PageUp/
+-- PageDown instead, which is what actually scrolls the output.
+--
+-- `mouse_reporting = false` scopes this to apps that have NOT enabled mouse
+-- reporting, so vim/tmux with real mouse support keep their own handling.
+
+config.mouse_bindings = {
+  {
+    event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+    mods = "NONE",
+    alt_screen = true,
+    mouse_reporting = false,
+    action = act.SendKey({ key = "PageUp" }),
+  },
+  {
+    event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+    mods = "NONE",
+    alt_screen = true,
+    mouse_reporting = false,
+    action = act.SendKey({ key = "PageDown" }),
+  },
+}
+
 -- Keys ---------------------------------------------------------------------
 -- CMD on macOS, CTRL+SHIFT everywhere else. Built once as a plain string so
 -- there's no accidental "CTRL|SHIFT|SHIFT" when combining modifiers.
